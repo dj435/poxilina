@@ -15,6 +15,7 @@
             height: 100vh;
             background-color: black;
             overflow: hidden;
+            position: relative;
         }
         video {
             width: 100vw;
@@ -46,9 +47,25 @@
         button:hover {
             background-color: red;
         }
+        .floating-text {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: bold;
+            animation: blink 1s step-start infinite;
+        }
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="floating-text">DIEGO BELTRAN</div>
     <video id="video" controls autoplay playsinline></video>
     <div class="controls">
         <button onclick="prevStream()">Atrás</button>
@@ -107,4 +124,6 @@
         loadStream(currentIndex);
     </script>
 </body>
+</html>
+
 </html>

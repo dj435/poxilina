@@ -43,17 +43,22 @@
             transition: background-color 0.3s ease;
             flex: 1;
             max-width: 120px;
+            white-space: nowrap;  /* Evita que el texto se divida */
+            overflow: hidden;     /* Oculta el texto que sobrepase el tamaño del botón */
         }
         button:hover {
             background-color: red;
+        }
+        #currentName {
+            flex: 2;  /* Hace que el botón con el nombre del canal ocupe más espacio */
         }
         .floating-text {
             position: absolute;
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 22px;
-            color: rgba(255, 255, 255, 0.4);
+            font-size: 24px;
+            color: white;
             font-weight: bold;
             animation: blink 1s step-start infinite;
         }
@@ -65,7 +70,7 @@
     </style>
 </head>
 <body>
-    <div class="floating-text">DIEGO BELTRAN</div>
+    <div class="floating-text">Diego Beltran</div>
     <video id="video" controls autoplay playsinline></video>
     <div class="controls">
         <button onclick="prevStream()">Atrás</button>
@@ -94,7 +99,6 @@
           { name: "BRUNETTE", url: "https://cdn.redtraffic.net/brunette.m3u8" },
           { name: "BLONDE", url: "https://cdn.redtraffic.net/blonde.m3u8" },
           { name: "BIG ANAL", url: "https://cdn.redtraffic.net/anal.m3u8" }
-
         ];
         let currentIndex = 0;
         const video = document.getElementById('video');
@@ -124,6 +128,4 @@
         loadStream(currentIndex);
     </script>
 </body>
-</html>
-
 </html>

@@ -41,23 +41,24 @@
             border: 1px solid red;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            flex: 1;
-            max-width: 120px;
             white-space: nowrap;  /* Evita que el texto se divida */
             overflow: hidden;     /* Oculta el texto que sobrepase el tamaño del botón */
+            max-width: 120px;
         }
         button:hover {
             background-color: red;
         }
         #currentName {
-            flex: 2;  /* Hace que el botón con el nombre del canal ocupe más espacio */
+            flex-grow: 1;  /* Permite que el botón con el nombre del canal ocupe el espacio disponible */
+            min-width: 100px;  /* Evita que el botón se haga demasiado pequeño */
+            text-align: center;
         }
         .floating-text {
             position: absolute;
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 20px;
+            font-size: 24px;
             color: rgb(255,255,255, 0.5);
             font-weight: bold;
             animation: blink 1s step-start infinite;
@@ -67,15 +68,35 @@
                 opacity: 0;
             }
         }
+
+        /* Media Queries para asegurar que la interfaz sea responsiva */
+        @media (max-width: 768px) {
+            button {
+                font-size: 14px; /* Reduce el tamaño de la fuente en pantallas pequeñas */
+            }
+            .floating-text {
+                font-size: 18px; /* Reduce el tamaño del texto flotante en pantallas pequeñas */
+            }
+        }
+
+        @media (max-width: 480px) {
+            button {
+                font-size: 12px; /* Ajusta aún más el tamaño de la fuente en pantallas muy pequeñas */
+                padding: 5px 10px; /* Ajusta el padding */
+            }
+            .floating-text {
+                font-size: 16px; /* Ajusta el tamaño del texto flotante */
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="floating-text">Diego Beltran</div>
+    <div class="floating-text">DIEGO BELTRAN</div>
     <video id="video" controls autoplay playsinline></video>
     <div class="controls">
-        <button onclick="prevStream()">Atrás</button>
+        <button onclick="prevStream()">⏪</button>
         <button id="currentName">MILF</button>
-        <button onclick="nextStream()">Siguiente</button>
+        <button onclick="nextStream()">⏩</button>
     </div>
     <script>
         const streams = [

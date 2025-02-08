@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canal de TV</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        body { margin: 0; background: black; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <video id="video" autoplay></video>
+
+    <script>
+        const video = document.getElementById('video');
+        const proxy = "https://corsproxy.io/?"; // Proxy para evitar CORS
+        const baseUrl = "https://xc.adultiptv.net/movie/adultiptv/adultiptv/";
+
+        function getRandomVideo() {
+            const randomNumber = Math.floor(Math.random() * (14872 - 200 + 1)) + 200;
+            return proxy + baseUrl + randomNumber + ".m3u8";
+        }
+
+        function loadVideo(url) {
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(url);
+                hls.attachMedia(video);
+                hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error("Error de HLS.js:", data);
+                    setTimeout(() => loadVideo(getRandomVideo()), 3000); // Si hay error, intenta otro video en 3 seg.
+                });
+            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                video.src = url;
+            }
+
+            video.currentTime = 45; // Inicia desde el segundo 45
+        }
+
+        video.addEventListener('ended', () => {
+            loadVideo(getRandomVideo()); // Cuando termina, carga otro aleatorio
+        });
+
+        loadVideo(getRandomVideo()); // Carga el primer video aleatorio
+    </script>
+</body>
+</html> 

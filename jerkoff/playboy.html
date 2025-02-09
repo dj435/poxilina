@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reproductor de Video HLS</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #000;
+      flex-direction: column;
+    }
+    #video-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    video {
+      width: 100%;
+      height: 100%;
+    }
+    .controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 20px;
+      z-index: 1;
+    }
+    .button {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .button:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="video-container">
+    <video id="video" controls></video>
+  </div>
+
+  <div class="controls">
+    <button class="button" id="back-btn">Atrás</button>
+    <button class="button" id="next-btn">Siguiente</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    const hls = new Hls();
+    const backButton = document.getElementById('back-btn');
+    const nextButton = document.getElementById('next-btn');
+
+    const channels = [
+   
+	  { name: 'Dorcel', url: 'https://ortepe.xyz:38097/tv/dorcel/playlist.m3u8' },
+      { name: 'Brazzers', url: 'https://ortepe.xyz:38097/tv/brazzers/playlist.m3u8' },
+      { name: 'Hustler HD', url: 'https://ortepe.xyz:38097/tv/hustlerhd/playlist.m3u8' },
+      { name: 'Hustler TV', url: 'https://ortepe.xyz:38097/tv/hustlertv/playlist.m3u8' },
+	  { name: 'Pink erotic 1', url: 'https://ortepe.xyz:38097/tv/pinkerotic1/playlist.m3u8' },
+	  { name: 'Pink erotic 7', url: 'https://ortepe.xyz:38097/tv/pinkerotic7/playlist.m3u8' },
+	  { name: 'Pink erotic 8', url: 'https://ortepe.xyz:38097/tv/pinkerotic8/playlist.m3u8' },
+	  { name: 'Private', url: 'https://ortepe.xyz:38097/tv/private/playlist.m3u8' },
+	  { name: 'Red Light', url: 'https://ortepe.xyz:38097/tv/redlight/playlist.m3u8' },
+	  { name: 'Penthouse', url: 'https://ortepe.xyz:38097/tv/penthouse/playlist.m3u8' },
+	  { name: 'Penthouse Passion', url: 'https://ortepe.xyz:38097/tv/penthousepassion/playlist.m3u8' },
+	  { name: 'SuperOne', url: 'https://ortepe.xyz:38097/tv/superone/playlist.m3u8' },
+	  { name: 'Vivid', url: 'https://ortepe.xyz:38097/tv/vivid/playlist.m3u8' },
+	  { name: 'Oxax', url: 'https://ortepe.xyz:38097/tv/oxax/playlist.m3u8' },
+	  { name: 'Passie', url: 'https://ortepe.xyz:38097/tv/passie/playlist.m3u8' },
+	  { name: 'EroXXX', url: 'https://ortepe.xyz:38097/tv/eroxxx/playlist.m3u8' },
+	  { name: 'Playboy', url: 'https://ortepe.xyz:38097/tv/playboy/playlist.m3u8' },
+	  { name: 'Pinko', url: 'https://ortepe.xyz:38097/tv/pinko/playlist.m3u8' },
+	  { name: 'Extasy', url: 'https://ortepe.xyz:38097/tv/extasy/playlist.m3u8' },
+	  { name: 'KinoXXX', url: 'https://ortepe.xyz:38097/tv/kinoxxx/playlist.m3u8' },
+	  { name: 'Penthouse Reality', url: 'https://ortepe.xyz:38097/tv/penthousereality/playlist.m3u8' },
+	  { name: 'Evil Angel', url: 'https://ortepe.xyz:38097/tv/evilangel/playlist.m3u8' },
+	  { name: 'Venus', url: 'https://ortepe.xyz:38097/tv/venus/playlist.m3u8' },
+	  { name: 'Barely Legal', url: 'https://ortepe.xyz:38097/tv/barely/playlist.m3u8' },
+	  { name: 'CentoXcento', url: 'https://ortepe.xyz:38097/tv/cento/playlist.m3u8' },
+	  
+	  { name: 'Meiden van Holland', url: 'https://ortepe.xyz:38097/tv/meidenvanholland/playlist.m3u8' }
+      
+    ];
+
+    let currentChannelIndex = 0;
+
+    // Función para cargar el video
+    function cargarVideo(url) {
+      if (Hls.isSupported()) {
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          video.play();
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.addEventListener('canplay', function() {
+          video.play();
+        });
+      }
+    }
+
+    // Función para actualizar el canal y cargar el video correspondiente
+    function actualizarCanal() {
+      const currentChannel = channels[currentChannelIndex];
+      cargarVideo(currentChannel.url);
+    }
+
+    // Inicializar el reproductor con el primer canal
+    actualizarCanal();
+
+    // Acción para el botón "Atrás"
+    backButton.addEventListener('click', function() {
+      currentChannelIndex = (currentChannelIndex - 1 + channels.length) % channels.length;
+      actualizarCanal();
+    });
+
+    // Acción para el botón "Siguiente"
+    nextButton.addEventListener('click', function() {
+      currentChannelIndex = (currentChannelIndex + 1) % channels.length;
+      actualizarCanal();
+    });
+  </script>
+
+</body>
+</html>

@@ -24,6 +24,17 @@
     video {
       width: 100%;
       height: 100%;
+      display: none;
+    }
+    #loading {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('cargar.gif') center no-repeat; /* Cambia 'loading.gif' por la imagen de carga */
+      background-size: contain;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .controls {
       position: fixed;
@@ -51,7 +62,8 @@
 <body>
 
   <div id="video-container">
-  <video id="video" autoplay></video>
+    <div id="loading"></div>
+    <video id="video" autoplay controlsList="nodownload nofullscreen noremoteplayback" disablepictureinpicture></video>
   </div>
 
   <div class="controls">
@@ -62,13 +74,13 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
     const video = document.getElementById('video');
+    const loading = document.getElementById('loading');
     const hls = new Hls();
     const backButton = document.getElementById('back-btn');
     const nextButton = document.getElementById('next-btn');
 
     const channels = [
-   
-	  { name: 'Dorcel', url: 'https://ortepe.xyz:38097/tv/dorcel/playlist.m3u8' },
+  { name: 'Dorcel', url: 'https://ortepe.xyz:38097/tv/dorcel/playlist.m3u8' },
       { name: 'Brazzers', url: 'https://ortepe.xyz:38097/tv/brazzers/playlist.m3u8' },
       { name: 'Hustler HD', url: 'https://ortepe.xyz:38097/tv/hustlerhd/playlist.m3u8' },
       { name: 'Hustler TV', url: 'https://ortepe.xyz:38097/tv/hustlertv/playlist.m3u8' },
@@ -100,8 +112,10 @@
 
     let currentChannelIndex = 0;
 
-    // Función para cargar el video
     function cargarVideo(url) {
+      video.style.display = 'none';
+      loading.style.display = 'flex'; // Muestra la imagen de carga
+
       if (Hls.isSupported()) {
         hls.loadSource(url);
         hls.attachMedia(video);
@@ -114,24 +128,25 @@
           video.play();
         });
       }
+
+      video.onloadeddata = function () {
+        loading.style.display = 'none'; // Oculta la imagen de carga
+        video.style.display = 'block'; // Muestra el video
+      };
     }
 
-    // Función para actualizar el canal y cargar el video correspondiente
     function actualizarCanal() {
       const currentChannel = channels[currentChannelIndex];
       cargarVideo(currentChannel.url);
     }
 
-    // Inicializar el reproductor con el primer canal
     actualizarCanal();
 
-    // Acción para el botón "Atrás"
     backButton.addEventListener('click', function() {
       currentChannelIndex = (currentChannelIndex - 1 + channels.length) % channels.length;
       actualizarCanal();
     });
 
-    // Acción para el botón "Siguiente"
     nextButton.addEventListener('click', function() {
       currentChannelIndex = (currentChannelIndex + 1) % channels.length;
       actualizarCanal();

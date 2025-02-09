@@ -30,7 +30,7 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      background: url('cargar.gif') center no-repeat; /* Cambia 'loading.gif' por la imagen de carga */
+      background: url('cargar.gif') center no-repeat;
       background-size: contain;
       display: flex;
       justify-content: center;
@@ -57,9 +57,31 @@
     .button:hover {
       background-color: rgba(0, 0, 0, 0.8);
     }
+
+    /* Título flotante */
+    #floating-title {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.5);
+      padding: 10px 20px;
+      display: none;
+      animation: blink 2s infinite alternate;
+	  z-index: 3;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      100% { opacity: 0.2; }
+    }
   </style>
 </head>
 <body>
+
+  <div id="floating-title">Canales de TV</div>
 
   <div id="video-container">
     <div id="loading"></div>
@@ -75,18 +97,20 @@
   <script>
     const video = document.getElementById('video');
     const loading = document.getElementById('loading');
+    const floatingTitle = document.getElementById('floating-title');
     const hls = new Hls();
     const backButton = document.getElementById('back-btn');
     const nextButton = document.getElementById('next-btn');
 
     const channels = [
-  { name: 'Dorcel', url: 'https://ortepe.xyz:38097/tv/dorcel/playlist.m3u8' },
+
       { name: 'Brazzers', url: 'https://ortepe.xyz:38097/tv/brazzers/playlist.m3u8' },
       { name: 'Hustler HD', url: 'https://ortepe.xyz:38097/tv/hustlerhd/playlist.m3u8' },
       { name: 'Hustler TV', url: 'https://ortepe.xyz:38097/tv/hustlertv/playlist.m3u8' },
 	  { name: 'Pink erotic 1', url: 'https://ortepe.xyz:38097/tv/pinkerotic1/playlist.m3u8' },
 	  { name: 'Pink erotic 7', url: 'https://ortepe.xyz:38097/tv/pinkerotic7/playlist.m3u8' },
 	  { name: 'Pink erotic 8', url: 'https://ortepe.xyz:38097/tv/pinkerotic8/playlist.m3u8' },
+	  { name: 'Dorcel', url: 'https://ortepe.xyz:38097/tv/dorcel/playlist.m3u8' },
 	  { name: 'Private', url: 'https://ortepe.xyz:38097/tv/private/playlist.m3u8' },
 	  { name: 'Red Light', url: 'https://ortepe.xyz:38097/tv/redlight/playlist.m3u8' },
 	  { name: 'Penthouse', url: 'https://ortepe.xyz:38097/tv/penthouse/playlist.m3u8' },
@@ -114,7 +138,7 @@
 
     function cargarVideo(url) {
       video.style.display = 'none';
-      loading.style.display = 'flex'; // Muestra la imagen de carga
+      loading.style.display = 'flex';
 
       if (Hls.isSupported()) {
         hls.loadSource(url);
@@ -130,8 +154,8 @@
       }
 
       video.onloadeddata = function () {
-        loading.style.display = 'none'; // Oculta la imagen de carga
-        video.style.display = 'block'; // Muestra el video
+        loading.style.display = 'none';
+        video.style.display = 'block';
       };
     }
 
@@ -151,6 +175,11 @@
       currentChannelIndex = (currentChannelIndex + 1) % channels.length;
       actualizarCanal();
     });
+
+    // Mostrar el título flotante después de 20 segundos
+    setTimeout(() => {
+      floatingTitle.style.display = "block";
+    }, 20000);
   </script>
 
 </body>

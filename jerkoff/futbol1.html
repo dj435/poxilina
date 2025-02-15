@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reproductor de Canales</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: black;
+            position: relative;
+        }
+        iframe {
+            width: 80%;
+            height: 80vh;
+            border: none;
+            display: none;
+        }
+        .btn-container {
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            gap: 20px;
+        }
+        .btn {
+            background-color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: white;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <img id="loader" class="loader" src="cargar.gif" alt="Cargando...">
+    <iframe id="player" src="https://la12hd.com/vivo/canal.php?stream=tudn" allowfullscreen autoplay onload="hideLoader()"></iframe>
+    <div class="btn-container">
+        <button class="btn" onclick="changeChannel(-1)">&#9665; Anterior</button>
+        <button class="btn" onclick="changeChannel(1)">Siguiente &#9655;</button>
+    </div>
+
+    <script>
+        const channels = [
+            "tudn", "espn", "espn2", "espn3", "dsports", "dsports2", 
+            "winsportsplus", "disney4", "max1", "ligadecampeones2", 
+            "foxsports", "tntsports", "espnpremium"
+        ];
+        let currentIndex = 0;
+        
+        function changeChannel(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = channels.length - 1;
+            if (currentIndex >= channels.length) currentIndex = 0;
+            showLoader();
+            document.getElementById("player").src = `https://la12hd.com/vivo/canal.php?stream=${channels[currentIndex]}`;
+        }
+        
+        function showLoader() {
+            document.getElementById("loader").style.display = "block";
+            document.getElementById("player").style.display = "none";
+        }
+        
+        function hideLoader() {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("player").style.display = "block";
+        }
+    </script>
+</body>
+</html>

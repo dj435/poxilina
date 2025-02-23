@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Editor JavaScript online - www.cubicfactory.com</title>
+</head>
+<body>
+<div id="oculto">
+    <iframe width="100%" height="100%" 
+        src="//ok.ru/videoembed/7657851456103?nochat=1" 
+        frameborder="0" allow="autoplay" allowfullscreen>
+    </iframe>
+</div>
+
+<style>
+    #oculto {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        pointer-events: none; /* Desactiva la interacción con el video */
+    }
+
+    #oculto::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.1); /* Opcional: capa encima, puedes ajustarla o eliminarla */
+    }
+</style>
+</body>
+</html>

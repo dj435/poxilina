@@ -66,27 +66,6 @@
 
         // Ocultar el botón una vez que se presione
         document.getElementById('playButton').style.display = 'none';
-
-        // Guardar en localStorage que el video fue iniciado
-        localStorage.setItem('videoStarted', 'true');
-    }
-
-    // Verificar si el video ha sido reproducido antes de mostrar el botón
-    window.onload = function() {
-        // Si ya se reprodujo el video antes, ocultar el botón de reproducción
-        if (localStorage.getItem('videoStarted') === 'true') {
-            document.getElementById('playButton').style.display = 'none';
-        }
-        
-        // Asegurarse de que el video comienza desde el principio cuando se recarga
-        var iframe = document.getElementById('video');
-        iframe.src = iframe.src.split('&autoplay=1')[0];  // Eliminar autoplay si existe para reiniciar el video
-    }
-
-    // Reiniciar la información cuando el usuario navega hacia atrás
-    window.onbeforeunload = function() {
-        // Borrar el estado del video (para reiniciar en el siguiente acceso)
-        localStorage.removeItem('videoStarted');
     }
 </script>
 

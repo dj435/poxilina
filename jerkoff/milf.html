@@ -36,4 +36,10 @@
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = m3u8Url;
-      video.addEventListener('loadedmetadata', () =>
+      video.addEventListener('loadedmetadata', () => {
+        video.play();
+      });
+    }
+  </script>
+</body>
+</html>

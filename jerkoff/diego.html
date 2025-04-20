@@ -120,43 +120,52 @@
             { name: "BIG ANAL", url: "http://live.redtraffic.xyz/anal.m3u8" }
         ];
         let currentIndex = 0;
-        const video = document.getElementById('video');
-        const currentName = document.getElementById('currentName');
-        const loading = document.getElementById('loading');
+const video = document.getElementById('video');
+const currentName = document.getElementById('currentName');
+const loading = document.getElementById('loading');
 
-        function loadStream(index) {
-            // Mostrar pantalla de carga
-            loading.style.display = "flex";
-            video.style.display = "none";
+let hls = null; // Instancia global
 
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(streams[index].url);
-                hls.attachMedia(video);
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = streams[index].url;
-            }
+function loadStream(index) {
+    // Mostrar pantalla de carga
+    loading.style.display = "flex";
+    video.style.display = "none";
 
-            currentName.textContent = streams[index].name;
+    // Detener y destruir la instancia previa si existe
+    if (hls) {
+        hls.destroy();
+        hls = null;
+    }
 
-            // Cuando el video puede reproducirse, ocultar la pantalla de carga
-            video.oncanplay = () => {
-                loading.style.display = "none";
-                video.style.display = "block";
-            };
-        }
+    if (Hls.isSupported()) {
+        hls = new Hls();
+        hls.loadSource(streams[index].url);
+        hls.attachMedia(video);
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streams[index].url;
+    }
 
-        function prevStream() {
-            currentIndex = (currentIndex - 1 + streams.length) % streams.length;
-            loadStream(currentIndex);
-        }
+    currentName.textContent = streams[index].name;
 
-        function nextStream() {
-            currentIndex = (currentIndex + 1) % streams.length;
-            loadStream(currentIndex);
-        }
+    // Cuando el video pueda reproducirse, ocultar pantalla de carga
+    video.oncanplay = () => {
+        loading.style.display = "none";
+        video.style.display = "block";
+    };
+}
 
-        loadStream(currentIndex);
+function prevStream() {
+    currentIndex = (currentIndex - 1 + streams.length) % streams.length;
+    loadStream(currentIndex);
+}
+
+function nextStream() {
+    currentIndex = (currentIndex + 1) % streams.length;
+    loadStream(currentIndex);
+}
+
+loadStream(currentIndex);
+
     </script>
 </body>
 </html> 

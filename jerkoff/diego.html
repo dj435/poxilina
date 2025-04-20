@@ -118,8 +118,9 @@
             { name: "BRUNETTE", url: "https://live.redtraffic.xyz/brunette.m3u8" },
             { name: "BLONDE", url: "https://live.redtraffic.xyz/blonde.m3u8" },
             { name: "BIG ANAL", url: "https://live.redtraffic.xyz/anal.m3u8" }
+          
         ];
-let currentIndex = 0;
+        let currentIndex = 0;
 const video = document.getElementById('video');
 const currentName = document.getElementById('currentName');
 const loading = document.getElementById('loading');
@@ -137,36 +138,21 @@ function loadStream(index) {
         hls = null;
     }
 
-    const streamUrl = streams[index].url;
-    const streamName = streams[index].name;
-
-    currentName.textContent = streamName;
-
     if (Hls.isSupported()) {
         hls = new Hls();
-        hls.loadSource(streamUrl);
+        hls.loadSource(streams[index].url);
         hls.attachMedia(video);
-
-        hls.on(Hls.Events.MANIFEST_PARSED, function () {
-            video.play().then(() => {
-                loading.style.display = "none";
-                video.style.display = "block";
-            }).catch((e) => {
-                console.log("Autoplay bloqueado:", e);
-            });
-        });
-
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = streamUrl;
-        video.addEventListener('loadedmetadata', () => {
-            video.play().then(() => {
-                loading.style.display = "none";
-                video.style.display = "block";
-            }).catch((e) => {
-                console.log("Autoplay bloqueado:", e);
-            });
-        });
+        video.src = streams[index].url;
     }
+
+    currentName.textContent = streams[index].name;
+
+    // Cuando el video pueda reproducirse, ocultar pantalla de carga
+    video.oncanplay = () => {
+        loading.style.display = "none";
+        video.style.display = "block";
+    };
 }
 
 function prevStream() {
@@ -179,10 +165,8 @@ function nextStream() {
     loadStream(currentIndex);
 }
 
-// Cargar el primer stream al iniciar
 loadStream(currentIndex);
-
 
     </script>
 </body>
-</html> 
+</html>
